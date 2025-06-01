@@ -13,6 +13,7 @@ async def scrape_web(url: str) -> str:
     Contents are in "content" field.
     If error occurs, "fail" field is set.
     URL of contents is in "url" field.
+    A sentence of contents is separated by "|".
     """
     
     result = {}
@@ -24,7 +25,7 @@ async def scrape_web(url: str) -> str:
         
         docs = BeautifulSoup(response.text, "lxml")
             
-        result["content"] = docs.get_text()
+        result["content"] = docs.get_text("|", strip=True)
 
     except httpx.HTTPError as e:
         result["fail"] = f"HTTP error occurred: {e}"
@@ -34,6 +35,5 @@ async def scrape_web(url: str) -> str:
     response = json.dumps(result, ensure_ascii=False)
     return response
 
-
 if __name__ == "__main__":
-    main()
+    mcp.run()
