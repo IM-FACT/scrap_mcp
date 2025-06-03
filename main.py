@@ -137,9 +137,8 @@ async def load_page(url: str):
                         cleaned_text = ' '.join(content.split())
                         texts.append(cleaned_text)
 
-                    
         except PlaywrightTimeoutError:
-            browser.close()
+            await browser.close()
             raise
         
         await browser.close()
@@ -183,6 +182,7 @@ async def scrape_web(url: str, keyword: str = "default") -> str:
 
 
 if __name__ == '__main__':
+    asyncio.run(mcp.run())
     # texts = load_page('https://edition.cnn.com/2025/05/19/middleeast/socotra-trees-yemen-climate-change-intl-hnk')
     # contexts = keyword_context(texts, 'blood', context_range=150)
     
@@ -190,4 +190,3 @@ if __name__ == '__main__':
     # for i in range(len(contexts)):
     #     print(contexts[i])
     #     print('-'*100)
-    asyncio.run(mcp.run())
