@@ -9,5 +9,7 @@ dependencies = [
     "httpx>=0.28.1",
     "lxml>=5.4.0",
     "mcp[cli]>=1.9.2",
+    "pytest-playwright>=0.7.0",
     "requests>=2.32.3",
+    "tf-playwright-stealth>=1.1.2",
 ]
