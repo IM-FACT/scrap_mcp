@@ -1,14 +1,17 @@
-from brave_search_impl import brave_search_impl
 import sys
 import os
 import requests
 import asyncio
 import json
+
 from dotenv import load_dotenv
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
+from brave_search_impl import brave_search_impl
+from tool.rewrite_query import rewrite_query
 from main import scrape_web
 
 
@@ -28,20 +31,10 @@ def is_url_alive(url: str) -> bool:
         return not any(keyword in res.text.lower() for keyword in error_keywords)
     except requests.RequestException:
         return False
-
-# MCP POST 방식 대신, 직접 함수 호출
-# async def extract_text_from_url_local(url: str, keyword: str = "default") -> list[str]:
-#     try:
-#         result_json = await scrape_web(url, keyword)
-#         result = json.loads(result_json)
-#         return result.get("contexts", [])
-#     except Exception as e:
-#         print(f"스크래퍼 호출 실패: {e}")
-#         return []
-# 만약 scrape_web이 content 필드에 str로 줄 경우
-async def extract_text_from_url_local(url: str) -> list[str]:
+    
+async def brave_scrap(url: str, keyword: str="default") -> list[str]:
     try:
-        result_json = await scrape_web(url)
+        result_json = await scrape_web(url, keyword)
         result = json.loads(result_json)
         content = result.get("content", "")
         if isinstance(content, str):
@@ -60,7 +53,12 @@ async def main():
 
     for query in test_queries:
         print(f"\n[질문] {query}")
-        results = brave_search_impl(query=query, api_key=api_key, count=5)
+        rewritten_query_list=rewrite_query(query)
+        print(f"\n[키워드] {rewritten_query_list}")
+        results = []
+        for r_q in rewritten_query_list:
+            partial_results = brave_search_impl(query=r_q, api_key=api_key, count=2)
+            results.extend(partial_results)
 
         valid_results = [res for res in results if is_url_alive(res["url"])]
 
@@ -73,8 +71,7 @@ async def main():
             print(f"{item['text']}")
             print(f"{item['url']}")
 
-            # full_texts = await extract_text_from_url_local(item["url"], keyword="기후")
-            full_texts = await extract_text_from_url_local(item["url"])
+            full_texts = await brave_scrap(item["url"], rewritten_query_list)
 
             if not full_texts:
                 print("본문 없음 또는 에러 발생")

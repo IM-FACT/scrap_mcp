@@ -1,4 +1,5 @@
 from mcp.server.fastmcp import FastMCP
+from typing import Union
 import json
 import asyncio
 import sys
@@ -14,7 +15,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 mcp = FastMCP("Scraper")
 
 @mcp.tool()
-async def scrape_web(url: str) -> str:
+async def scrape_web(url: str, keyword: Union[str, list[str]] = "default") -> str:
     """
     Scrape a website of given URL and extract context of given keyword and return all text in JSON style.
     URL of contents is in "url" field.

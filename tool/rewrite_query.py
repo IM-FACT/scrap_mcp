@@ -7,7 +7,9 @@ load_dotenv()
 client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
 
 def load_prompt(filename):
-    filepath = os.path.join("prompts", filename)
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    prompts_dir = os.path.join(root_dir, "prompts")
+    filepath = os.path.join(prompts_dir, filename)
     with open(filepath, 'r', encoding='utf-8') as f:
         return f.read()
 
