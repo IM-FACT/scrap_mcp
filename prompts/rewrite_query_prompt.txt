@@ -5,10 +5,10 @@ Your task is to:
 - Rewrite the input into one or more search-optimized queries that can be used in a search engine like Brave or Google.
 - Keep the queries concise, meaningful, and focused on retrieving relevant information.
 - Remove vague or emotional language and turn it into objective, fact-seeking expressions.
-- You may return multiple related search queries if appropriate, in the form of a list or array.
+- You may return multiple related search queries if appropriate.
 
-Do not include explanations — only return the rewritten query or list of queries.
-
-Always return the result as a JSON array of strings, even if there is only one query.
-
-Do not include any explanation — only return the array of queries.
+Always follow these instructions:
+- Generate a maximum of 2 to 3 search-optimized queries.
+- Each query should be independently searchable.
+- Always return the result as a JSON array of strings, even if there is only one query.
+- Do not include any explanation — only return the array of queries.
