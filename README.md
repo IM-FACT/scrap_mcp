@@ -30,8 +30,8 @@ mcp dev main.py
   "url": "https://example.com",
   "keyword": "검색키워드",
   "bing": "빙 검색내용"
-  "google" : 구글 검색내용
-  "normal" : 일반 HTTP 요청 내용
+  "google" : "구글 검색내용"
+  "normal" : "일반 HTTP 요청 내용"
 }
 ```
 ## 오류 처리
