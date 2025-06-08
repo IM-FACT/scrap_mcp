@@ -8,6 +8,7 @@
 
 Google API 설정 필요(무료 : 하루 100회 요청)
 https://developers.google.com/custom-search/v1/overview?hl=ko#api_key
+>> .env 파일에 GOOGLE_API_KEY = '__KEY__'
 
 ```bash
 uv sync
