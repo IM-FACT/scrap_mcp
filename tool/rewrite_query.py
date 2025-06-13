@@ -14,15 +14,43 @@ def load_prompt(filename):
         return f.read()
 
 
-def rewrite_query(user_query: str) -> list[str]:
+# def rewrite_query(user_query: str) -> tuple[list[str], list[str]]:
+#     try:
+#         # response = client.responses.create(
+#         #     instructions=load_prompt("rewrite_query_prompt.txt"),
+#         #     model="gpt-4.1",
+#         #     input=user_query
+#         # )
+#         # result = json.loads(response.choices[0].message.content.strip())
+#         # return result["korean"], result["english"]
+#         response = client.chat.completions.create(
+#             model="gpt-4.1",
+#             messages=[
+#                 {"role": "system", "content": load_prompt("rewrite_query_prompt.txt")},
+#                 {"role": "user", "content": user_query}
+#             ],
+#             temperature=0.3,
+#         )
+#         result = json.loads(response.choices[0].message.content.strip())
+#         return result["korean"], result["english"]
+#     except Exception as e:
+#         print(f"키워드 리라이팅 실패")
+#         print(f"{e}")
+#         return [user_query], []
+
+def rewrite_query(user_query: str) -> tuple[list[str], list[str]]:
     try:
-        response = client.responses.create(
-            instructions=load_prompt("rewrite_query_prompt.txt"),
-            model="gpt-4.1",
-            input=user_query
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": load_prompt("rewrite_query_prompt.txt")},
+                {"role": "user", "content": user_query}
+            ],
+            temperature=0.3,
         )
-        return json.loads(response.output_text.strip())
+        result = json.loads(response.choices[0].message.content.strip())
+        return result["korean"], result["english"]
     except Exception as e:
-        print(f"키워드 리라이팅 실패")
-        print(f"{e}")
-        return user_query
+        print("키워드 리라이팅 실패")
+        print(e)
+        return [user_query], []

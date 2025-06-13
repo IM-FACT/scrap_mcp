@@ -53,7 +53,8 @@ async def main():
 
     for query in test_queries:
         print(f"\n[질문] {query}")
-        rewritten_query_list=rewrite_query(query)
+        kor_queries, eng_queries = rewrite_query(query)
+        rewritten_query_list=kor_queries + eng_queries
         print(f"\n[키워드] {rewritten_query_list}")
         results = []
         for r_q in rewritten_query_list:
@@ -77,6 +78,7 @@ async def main():
                 print("본문 없음 또는 에러 발생")
             elif len(full_texts[0]) < 100:
                 print("본문 추출 성공했지만 너무 짧음")
+                print(full_texts[0][:100])
             else:
                 print("본문 일부:")
                 print(full_texts[0][:10000])

@@ -7,8 +7,18 @@ Your task is to:
 - Remove vague or emotional language and turn it into objective, fact-seeking expressions.
 - You may return multiple related search queries if appropriate.
 
+Generate both Korean and English versions of each query.
+
 Always follow these instructions:
-- Generate a maximum of 2 to 3 search-optimized queries.
+- Generate a maximum of 2 to 3 search-optimized queries per language.
 - Each query should be independently searchable.
-- Always return the result as a JSON array of strings, even if there is only one query.
-- Do not include any explanation — only return the array of queries.
+- Return the result as a JSON object with two fields:
+  - "korean": an array of Korean queries.
+  - "english": an array of English queries.
+- Do not include any explanation or extra text — only return the JSON object.
+
+Example format:
+{
+  "korean": ["한국의 기후 변화 원인", "이상기후 최근 사례"],
+  "english": ["causes of climate change in Korea", "recent examples of extreme weather"]
+}
