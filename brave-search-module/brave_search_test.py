@@ -36,11 +36,20 @@ async def brave_scrap(url: str, keyword: str="default") -> list[str]:
     try:
         result_json = await scrape_web(url, keyword)
         result = json.loads(result_json)
-        content = result.get("content", "")
-        if isinstance(content, str):
+
+        # print(result_json)
+        # 우선순위: normal → google → page.description
+        content = result.get("normal")
+        if not content or not isinstance(content, str) or len(content.strip()) == 0:
+            content = result.get("google")
+        if not content or not isinstance(content, str) or len(content.strip()) == 0:
+            content = result.get("page", {}).get("description", "")
+
+        if content and isinstance(content, str):
             return [content]
         else:
             return []
+
     except Exception as e:
         print(f"스크래퍼 호출 실패: {e}")
         return []
@@ -81,7 +90,7 @@ async def main():
                 print(full_texts[0][:100])
             else:
                 print("본문 일부:")
-                print(full_texts[0][:10000])
+                print(full_texts[0][:1000])
 
 # 실행
 if __name__ == "__main__":

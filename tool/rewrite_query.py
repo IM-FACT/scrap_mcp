@@ -46,7 +46,7 @@ def rewrite_query(user_query: str) -> tuple[list[str], list[str]]:
                 {"role": "system", "content": load_prompt("rewrite_query_prompt.txt")},
                 {"role": "user", "content": user_query}
             ],
-            temperature=0.3,
+            temperature=0,
         )
         result = json.loads(response.choices[0].message.content.strip())
         return result["korean"], result["english"]
