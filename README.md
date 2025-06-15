@@ -3,13 +3,20 @@
 ## 개요
 웹페이지에서 텍스트를 스크래핑하고 특정 키워드 주변의 컨텍스트를 추출하는 MCP(Model Context Protocol) 서버입니다. 
 기본적으로 trafilatura을 통해 웹을 요청 후 추출하고, 불가능한 사이트에 대응하기 위해 Google API와 Playwright를 이용한 bing 검색을 수행하여 스니펫을 가져옵니다.
+추가적으로 GPT 기반 키워드 리라이팅 및 Brave Search API (Data for AI)를 통해 보다 신뢰도 높은 웹 문서를 선별할 수 있습니다.
 
 ## 설치 및 설정
+### 환경 변수 설정 (.env 파일)
+GOOGLE_API_KEY=your_google_key        # Google Custom Search API
+OPENAI_API_KEY=your_openai_key        # OpenAI GPT-4 API Key (rewrite_query 용)
+BRAVE_AI_API_KEY=your_brave_key       # Brave Search API for Data for AI
 
-Google API 설정 필요(무료 : 하루 100회 요청)
+>> Google API 설정 필요(무료 : 하루 100회 요청)
 https://developers.google.com/custom-search/v1/overview?hl=ko#api_key
->> .env 파일에 GOOGLE_API_KEY = '__KEY__'
+>> Brave Search API는 Brave 계정에서 발급 가능 
+https://search.brave.com/api
 
+### Python 패키지 설치
 ```bash
 uv sync
 playwright install  # 웹드라이버 의존성 설치
@@ -19,9 +26,13 @@ playwright install  # 웹드라이버 의존성 설치
 
 playwright가 실제 웹을 통해 작동하므로 유의바람
 
-### 테스트
+### 키워드 기반 스크래핑 실행
 ```bash
 mcp dev main.py
+```
+### Brave Search + 키워드 리라이팅 포함 스크래핑
+```bash
+python scrap_mcp/tests/test_mcp_module.py
 ```
 
 
@@ -29,15 +40,39 @@ mcp dev main.py
 ```json
 {
   "url": "https://example.com",
-  "keyword": "검색키워드",
-  "bing": "빙 검색내용"
-  "google" : "구글 검색내용"
-  "normal" : "일반 HTTP 요청 내용"
+  "keyword": "검색 키워드",
+  "page": {
+    "title": "페이지 제목",
+    "description": "메타 디스크립션",
+    "content": "본문 전체 내용"
+  },
+  "google": "구글 스니펫 (본문 없을 경우)",
+  "normal": "정상 HTTP 응답 본문"
 }
+
+```
+normal → google → page.description 순으로 우선순위가 적용되어 최종 문서가 추출됩니다.
+
+## 디렉토리 구조
+```bash
+scrap_mcp/
+├── main.py               # Scraper 모듈
+├── mcp_module.py         # GPT 4o 리라이팅 + Brave Search + Scraper 연동
+├── brave_search_module/
+│   └── brave_search_impl.py  # Brave Search API Data for AI 모듈
+│   └── brave_search_test.py
+├── tool/
+│   ├── rewrite_query.py  # Keyword rewriting 모듈
+│   ├── bing.py
+│   ├── goo_api.py
+│   └── text.py
+├── tests/
+│   └── test_mcp_module.py  # 테스트 코드
 ```
 ## 오류 처리
 
 - 응답 JSON에 실패시 해당하는 메시지가 출력
+- 페이지가 없거나 403/404 응답 시 Google/Bing 스니펫으로 대체
 
 ## 스크래핑 설정
 
