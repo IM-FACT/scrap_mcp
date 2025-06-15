@@ -11,9 +11,10 @@ GOOGLE_API_KEY=your_google_key        # Google Custom Search API
 OPENAI_API_KEY=your_openai_key        # OpenAI GPT-4 API Key (rewrite_query 용)
 BRAVE_AI_API_KEY=your_brave_key       # Brave Search API for Data for AI
 
->> Google API 설정 필요(무료 : 하루 100회 요청)
+> Google API 설정 필요(무료 : 하루 100회 요청)
 https://developers.google.com/custom-search/v1/overview?hl=ko#api_key
->> Brave Search API는 Brave 계정에서 발급 가능 
+
+> Brave Search API는 Brave 계정에서 발급 가능 
 https://search.brave.com/api
 
 ### Python 패키지 설치
