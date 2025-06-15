@@ -6,7 +6,7 @@ import io
 import re
 
 from tool.text import use_tra
-from tool.bing import use_bing
+from tool.bing import use_bing_n_page
 from tool.goo_api import use_google
 
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
@@ -14,28 +14,30 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 mcp = FastMCP("Scraper")
 
 @mcp.tool()
-async def scrape_web(url: str, keyword: str = "default") -> str:
+async def scrape_web(url: str) -> str:
     """
     Scrape a website of given URL and extract context of given keyword and return all text in JSON style.
     URL of contents is in "url" field.
-    Keyword is in "keyword" field. If keyword is not given, "default" is used. 
-    If keyword is not given, mid-range text is returned..
-    Bing and Google search results on URL are in "bing" and "google" field.
+    Google search results on URL are in "google" field.
     General HTTP Request result is in "normal" field.
+    Using web browser to get the content of the page is in "page" field. 
+    In page field, title and description field is on Bing search result.
+    Content field is extracted text from the page.
     """
 
     result = {}
     result["url"] = url
-    result["keyword"] = keyword
-    
-    result["bing"] = await use_bing(url)
-    result["google"] = await use_google(url)
-    result["normal"] = use_tra(url, keyword=keyword)
+    tasks = [use_bing_n_page(url), use_google(url), asyncio.to_thread(use_tra, url)]
+    results = await asyncio.gather(*tasks)
+
+    result["page"] = results[0]
+    result["google"] = results[1]
+    result["normal"] = results[2]
+
     
     response = json.dumps(result, ensure_ascii=False)
     cleaned = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', response)
     
-    print(cleaned)
     return cleaned
 
 

@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import aiohttp
 import asyncio
 import os
+import json
 
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -29,9 +30,11 @@ async def use_google(url: str):
                     except:
                         response["description"] = "No description is available for this content"
 
+        if not response:
+            response = "Fail"
         return response
     except Exception as e:
         return str(e)
 
 if __name__ == "__main__":
-    asyncio.run(use_google("https://gall.dcinside.com/mgallery/board/lists/?id=hypergryph"))
+    print(asyncio.run(use_google("https://www.me.go.kr/home/file/readDownloadFile.do?fileId=97828&fileSeq=1&openYn=Y")))
