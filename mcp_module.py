@@ -7,12 +7,12 @@ import json
 from dotenv import load_dotenv
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.join(current_dir, "brave-search-module")
-sys.path.append(parent_dir)
+project_root = os.path.abspath(os.path.join(current_dir, ".."))
+sys.path.append(project_root)
 
-from brave_search_impl import brave_search_impl
-from tool.rewrite_query import rewrite_query
-from main import scrape_web
+from scrap_mcp.brave_search_module.brave_search_impl import brave_search_impl
+from scrap_mcp.tool.rewrite_query import rewrite_query
+from scrap_mcp.main import scrape_web
 
 load_dotenv()
 api_key = os.getenv("BRAVE_AI_API_KEY")

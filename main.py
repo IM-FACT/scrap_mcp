@@ -6,9 +6,9 @@ import sys
 import io
 import re
 
-from tool.text import use_tra
-from tool.bing import use_bing_n_page
-from tool.goo_api import use_google
+from scrap_mcp.tool.text import use_tra
+from scrap_mcp.tool.bing import use_bing_n_page
+from scrap_mcp.tool.goo_api import use_google
 
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
