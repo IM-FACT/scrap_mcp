@@ -1,9 +1,9 @@
 # Web Scraper MCP Server
 
 ## 개요
-웹페이지에서 텍스트를 스크래핑하고 특정 키워드 주변의 컨텍스트를 추출하는 MCP(Model Context Protocol) 서버입니다. 
-기본적으로 trafilatura을 통해 웹을 요청 후 추출하고, 불가능한 사이트에 대응하기 위해 Google API와 Playwright를 이용한 bing 검색을 수행하여 스니펫을 가져옵니다.
-추가적으로 GPT 기반 키워드 리라이팅 및 Brave Search API (Data for AI)를 통해 보다 신뢰도 높은 웹 문서를 선별할 수 있습니다.
+웹 페이지로부터 신뢰도 높은 정보를 수집하고 정제된 텍스트를 반환하는 스크래핑 시스템입니다.
+GPT 4o 키워드 리라이팅 + Brave Search API → URL 수집 → 본문 스크래핑 → 본문 추출 → GPT 4.1로 답변 생성 과정을 수행하며,
+OpenAI API 기반 질문 답변용 RAG 시스템의 외부 문서 수집 컴포넌트로 사용됩니다.
 
 ## 설치 및 설정
 ### 환경 변수 설정 (.env 파일)
@@ -31,13 +31,13 @@ playwright가 실제 웹을 통해 작동하므로 유의바람
 ```bash
 mcp dev main.py
 ```
-### Brave Search + 키워드 리라이팅 포함 스크래핑
+### 키워드 리라이팅 + Brave Search + 스크래핑 + 답변 생성 테스트
 ```bash
 python scrap_mcp/tests/test_mcp_module.py
 ```
 
 
-### 응답 형식
+### 스크래핑 응답 형식
 ```json
 {
   "url": "https://example.com",
@@ -58,12 +58,16 @@ normal → google → page.description 순으로 우선순위가 적용되어 �
 ```bash
 scrap_mcp/
 ├── main.py               # Scraper 모듈
-├── mcp_module.py         # GPT 4o 리라이팅 + Brave Search + Scraper 연동
+├── mcp_module.py         # GPT 4o 키워드 리라이팅 + Brave Search + Scraper + GPT 4.1 답변 생성 연동
 ├── brave_search_module/
 │   └── brave_search_impl.py  # Brave Search API Data for AI 모듈
-│   └── brave_search_test.py
+│   └── brave_search_test.py  # Brave Search API 테스트
+├── prompts/
+│   ├── generate_ans_prompt.txt      # GPT 4.1 답변 생성용 프롬프트
+│   └── rewrite_query_prompt.txt     # GPT 4o 키워드 리라이팅용 프롬프트
 ├── tool/
-│   ├── rewrite_query.py  # Keyword rewriting 모듈
+│   ├── gen_ans.py           # GPT 4.1 기반 답변 생성 모듈
+│   ├── rewrite_query.py     # Keyword rewriting 모듈
 │   ├── bing.py
 │   ├── goo_api.py
 │   └── text.py
