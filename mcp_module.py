@@ -35,7 +35,7 @@ def is_url_alive(url: str) -> bool:
 async def search_scrap(query: str) -> list[str]:
     kor_queries, eng_queries = rewrite_query(query)
     rewritten_query_list = kor_queries + eng_queries
-
+    print(f"\nrewritten_query_list: {rewritten_query_list}")
     results = []
     for r_q in rewritten_query_list:
         partial_results = brave_search_impl(query=r_q, api_key=api_key, count=2)
@@ -61,5 +61,9 @@ async def search_scrap(query: str) -> list[str]:
 
         except Exception as e:
             print(f"{item['url']} 스크랩 실패: {e}")
+
+    # # 최대 5개까지만 반환
+    # if len(all_scrap_list) > 5:
+    #     all_scrap_list = all_scrap_list[:5]
 
     return all_scrap_list
