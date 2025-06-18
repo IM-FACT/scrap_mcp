@@ -32,7 +32,7 @@ def is_url_alive(url: str) -> bool:
         return False
 
 # 검색 + 스크래핑 연동 함수
-async def search_scrap(query: str) -> list[str]:
+async def search_scrap(query: str) -> list[dict]:
     kor_queries, eng_queries = rewrite_query(query)
     rewritten_query_list = kor_queries + eng_queries
     print(f"\nrewritten_query_list: {rewritten_query_list}")
@@ -57,7 +57,11 @@ async def search_scrap(query: str) -> list[str]:
                 content = result.get("page", {}).get("description", "")
 
             if content and isinstance(content, str) and len(content.strip()) > 0:
-                all_scrap_list.append(content.strip())
+                all_scrap_list.append({
+                    "url": item["url"],
+                    "content": content.strip()
+                })
+
 
         except Exception as e:
             print(f"{item['url']} 스크랩 실패: {e}")
