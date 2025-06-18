@@ -7,9 +7,11 @@ OpenAI API 기반 질문 답변용 RAG 시스템의 외부 문서 수집 컴포�
 
 ## 설치 및 설정
 ### 환경 변수 설정 (.env 파일)
+```bash
 GOOGLE_API_KEY=your_google_key        # Google Custom Search API
 OPENAI_API_KEY=your_openai_key        # OpenAI API
 BRAVE_AI_API_KEY=your_brave_key       # Brave Search API for Data for AI
+```bash
 
 > Google API 설정 필요(무료 : 하루 100회 요청)
 https://developers.google.com/custom-search/v1/overview?hl=ko#api_key
