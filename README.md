@@ -2,13 +2,13 @@
 
 ## 개요
 웹 페이지로부터 신뢰도 높은 정보를 수집하고 정제된 텍스트를 반환하는 스크래핑 시스템입니다.
-GPT 4o 키워드 리라이팅 + Brave Search API → URL 수집 → 본문 스크래핑 → 본문 추출 → GPT 4.1로 답변 생성 과정을 수행하며,
+GPT 4o 키워드 리라이팅 + Brave Search API → URL 수집 → 본문 스크래핑 → 본문 추출 → GPT 4-turbo로 답변 생성 과정을 수행하며,
 OpenAI API 기반 질문 답변용 RAG 시스템의 외부 문서 수집 컴포넌트로 사용됩니다.
 
 ## 설치 및 설정
 ### 환경 변수 설정 (.env 파일)
 GOOGLE_API_KEY=your_google_key        # Google Custom Search API
-OPENAI_API_KEY=your_openai_key        # OpenAI GPT-4 API Key (rewrite_query 용)
+OPENAI_API_KEY=your_openai_key        # OpenAI API
 BRAVE_AI_API_KEY=your_brave_key       # Brave Search API for Data for AI
 
 > Google API 설정 필요(무료 : 하루 100회 요청)
@@ -58,15 +58,15 @@ normal → google → page.description 순으로 우선순위가 적용되어 �
 ```bash
 scrap_mcp/
 ├── main.py               # Scraper 모듈
-├── mcp_module.py         # GPT 4o 키워드 리라이팅 + Brave Search + Scraper + GPT 4.1 답변 생성 연동
+├── mcp_module.py         # GPT 4o 키워드 리라이팅 + Brave Search + Scraper + GPT 4-turbo 답변 생성 연동
 ├── brave_search_module/
 │   └── brave_search_impl.py  # Brave Search API Data for AI 모듈
 │   └── brave_search_test.py  # Brave Search API 테스트
 ├── prompts/
-│   ├── generate_ans_prompt.txt      # GPT 4.1 답변 생성용 프롬프트
+│   ├── generate_ans_prompt.txt      # GPT 4-turbo 답변 생성용 프롬프트
 │   └── rewrite_query_prompt.txt     # GPT 4o 키워드 리라이팅용 프롬프트
 ├── tool/
-│   ├── gen_ans.py           # GPT 4.1 기반 답변 생성 모듈
+│   ├── gen_ans.py           # GPT 4-turbo 기반 답변 생성 모듈
 │   ├── rewrite_query.py     # Keyword rewriting 모듈
 │   ├── bing.py
 │   ├── goo_api.py
